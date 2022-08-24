@@ -1,0 +1,35 @@
+node 
+{  
+    stage('Git Clone') 
+	{ 
+     git changelog: false, credentialsId: 'github', poll: false, url: 'https://github.com/nsikbal/nsikbal.git'
+    }
+	stage('Sonar Scan') 
+	{ 
+     sh 'mvn sonar:sonar \
+  -Dsonar.host.url=http://3.238.227.249:9000 \
+  -Dsonar.login=e6996c615fdac48f76fd15d6a7447efaec8ea8fb'
+    }
+    stage('Maven Clean') 
+	{ 
+     sh 'mvn clean' 
+    }
+     stage('Code Validate') 
+	{ 
+     sh 'mvn validate' 
+    }
+     stage('Code Test') 
+	{ 
+     sh 'mvn test' 
+    }
+     stage('Code Compile') 
+	{ 
+     sh 'mvn compile' 
+    }
+     stage('Code Package') 
+	{ 
+     sh 'mvn package' 
+    }
+}
+
+
