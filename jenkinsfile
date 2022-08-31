@@ -1,34 +1,58 @@
-node 
-{  
-    stage('Git Clone') 
-	{ 
-     git changelog: false, credentialsId: 'github', poll: false, url: 'https://github.com/nsikbal/nsikbal.git'
+pipeline {
+    agent any
+
+    tools {
+       maven 'Maven 3.0.5'
     }
-	stage('Sonar Scan') 
-	{ 
-     sh 'mvn sonar:sonar \
-  -Dsonar.host.url=http://3.238.227.249:9000 \
-  -Dsonar.login=e6996c615fdac48f76fd15d6a7447efaec8ea8fb'
-    }
-    stage('Maven Clean') 
-	{ 
-     sh 'mvn clean' 
-    }
-     stage('Code Validate') 
-	{ 
-     sh 'mvn validate' 
-    }
-     stage('Code Test') 
-	{ 
-     sh 'mvn test' 
-    }
-     stage('Code Compile') 
-	{ 
-     sh 'mvn compile' 
-    }
-     stage('Code Package') 
-	{ 
-     sh 'mvn package' 
-    }
+    stages {
+        stage('Maven Version') {
+            steps {
+				sh 'mvn --version'
+            }
+            }
+        stage('Host Name') {
+            steps {
+				sh 'hostname'
+            }
+            }
+        stage('Git Clone') {
+            steps {
+				git credentialsId: 'github1', url: 'https://github.com/nsikbal/nsikbal.git'
+            }
+            }
+        stage('Sonar Scan') {
+            steps {
+				 sh 'mvn sonar:sonar \
+  -Dsonar.host.url=http://44.192.44.234:9000 \
+  -Dsonar.login=81e152d406dd47505c04ec29c1215008a7ef6b26'
+			}
+            }
+		stage('Clean') {
+            steps {
+				  sh 'mvn clean' 
+				}
+            }
+        stage('Validate') {
+            steps {
+				 sh 'mvn validate' 
+			}
+            }
+        stage('Compile') {
+            steps {
+				 sh 'mvn compile' 
+            }
+            }
+        stage('Test') {
+            steps {
+				 sh 'mvn test' 
+            }
+            }
+        stage('Package') {
+            steps {
+				 sh 'mvn package' 
+			
+            }
+            }
+        }
 }
 
